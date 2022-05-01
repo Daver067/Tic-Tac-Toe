@@ -1,3 +1,13 @@
+    /*************************************************************************************
+     * *****module for anything to do with the DOM manipulation
+    ************************************************************************************ */
+const dom = (() => {
+    let inputs = {
+    container: document.querySelector('.container'),
+    playerSelection: document.querySelector('.playerSelection'),
+    }
+    return {inputs};
+})();
 
 
 /***************************************************************************************
@@ -6,18 +16,41 @@
 let game = (()=>{
     let turnCounter = 0;
 
+    // player clicking on a square
+    function selectSquare(squareSelected){
+        if (win.winner == true){
+            return;
+        }
+        if (squareSelected.value != 0) {
+            alert("You must play in an un-occupied square");
+            return;
+        }
+        if ((game.turnCounter == 0) || (game.turnCounter % 2 == 0)){
+        squareSelected.InnerContent("X");
+        squareSelected.value = 1;
+        }
+        else {
+            squareSelected.InnerContent("O")
+            squareSelected.value = 10;
+        }
+        win.updateWins(squareSelected);
+        game.turnCounter++;
+        win.checkForWin();
+
+    }
+
+
     //building game board function
     function makeSection(section){
-        let container = document.querySelector(".container");
-        let newSection = document.createElement('div');
-        newSection.classList.add("board", section);
-        container.appendChild(newSection);
-        newSection = document.querySelector(`.${section}`)
+        let createNewSquare = document.createElement('div');
+        createNewSquare.classList.add("board", section);
+        dom.inputs.container.appendChild(createNewSquare);
+        createNewSquare = document.querySelector(`.${section}`)
 
         
 
     // The return object
-        let actualObject = {
+        let tic_tac_toe_square = {
         placement: section,
         value: 0,
         currentInnerContent: "",
@@ -28,28 +61,9 @@ let game = (()=>{
         }
         }
         //adding event listener to the newly created div
-        newSection.addEventListener('click', () => {selectSquare(actualObject)})
+        createNewSquare.addEventListener('click', function(){selectSquare(tic_tac_toe_square)})
 
-        return actualObject;
-    }
-    // player clicking on a square
-    function selectSquare(squareSelected){
-        if (squareSelected.value != 0) {
-            alert("You must play in an un-occupied square");
-            return;
-        }
-        if ((turnCounter == 0) || (turnCounter % 2 == 0)){
-        squareSelected.InnerContent("X");
-        squareSelected.value = 1;
-        }
-        else {
-            squareSelected.InnerContent("O")
-            squareSelected.value = 10;
-        }
-        win.UpdateWins(squareSelected);
-        turnCounter++;
-        win.CheckForWin();
-
+        return tic_tac_toe_square;
     }
 
     
@@ -65,70 +79,14 @@ let game = (()=>{
     new makeSection("bottomMid"),
     new makeSection("bottomRight"),
 ]
-    return {gameBoard, turnCounter};
-    })();
-
-/*********************************************************************************************
- *****module for end game conditions
- ****************************************************************************************** */
-const win = (()=>{
-//adding values to update win conditions
-let UpdateWins = function updateWins(squareSelected) {
-    if (squareSelected.placement.includes("top")){ winConditions.row1 += squareSelected.value}
-    if (squareSelected.placement.includes("mid")){ winConditions.row2 += squareSelected.value};
-    if (squareSelected.placement.includes("bottom")){ winConditions.row3 += squareSelected.value};
-    if (squareSelected.placement.includes("Left")){ winConditions.column1 += squareSelected.value};
-    if (squareSelected.placement.includes("Mid")){ winConditions.column2 += squareSelected.value};
-    if (squareSelected.placement.includes("Right")){ winConditions.column3 += squareSelected.value};
-    if (squareSelected.placement.includes("topLeft")){ winConditions.diag1 += squareSelected.value};
-    if (squareSelected.placement.includes("midMid")){ winConditions.diag1 += squareSelected.value};
-    if (squareSelected.placement.includes("bottomRight")){ winConditions.diag1 += squareSelected.value};
-    if (squareSelected.placement.includes("topRight")){ winConditions.diag2 += squareSelected.value};
-    if (squareSelected.placement.includes("bottomLeft")){ winConditions.diag2 += squareSelected.value};
-    if (squareSelected.placement.includes("midMid")){ winConditions.diag2 += squareSelected.value};
-    }
-
-//the rows and columns to check for winning
-    let winConditions = {
-        row1: 0,
-        row2: 0,
-        row3: 0,
-        column1: 0,
-        column2: 0,
-        column3: 0,
-        diag1: 0,
-        diag2: 0,
-    }
-
-
-  //checking for a win condition
-  let CheckForWin = function checkForWin(){
-    let winKeys = Object.keys(winConditions)
-        winKeys.forEach((key) => {
-            if (winConditions[key] === 3){
-                alert("X wins the game!")
-                return;
-            }
-            else if (winConditions[key] === 30){
-                alert("O wins the game")
-                return;
-            }
-            else if (((game.turnCounter === 9) && (winConditions[key] !==3)) && ((game.turnCounter === 9) && (winConditions[key] !==30))){
-                alert("it was a draw")
-                game.turnCounter = 0;
-                return;
-            }
-        })
-    };
-
 
     // reset game
-    let resetgame = function resetGame(){
-        let container = document.querySelector(".container");
-        while (container.firstChild){
-            container.removeChild(container.firstChild)
+    function resetGame(){
+        while (dom.inputs.container.firstChild){
+            dom.inputs.container.removeChild(dom.inputs.container.firstChild)
         }
-        gameBoard = [
+        game.gameBoard = []
+        game.gameBoard = [
             new makeSection("topLeft"),
             new makeSection("topMid"),
             new makeSection("topRight"),
@@ -139,7 +97,7 @@ let UpdateWins = function updateWins(squareSelected) {
             new makeSection("bottomMid"),
             new makeSection("bottomRight"),
         ]
-        winConditions = {
+        win.winConditions = {
             row1: 0,
             row2: 0,
             row3: 0,
@@ -150,16 +108,80 @@ let UpdateWins = function updateWins(squareSelected) {
             diag2: 0,
         }
         game.turnCounter = 0;
+        win.winner = false;
+        return;
     }
-    return {resetgame, CheckForWin, winConditions, UpdateWins}
+
+    return {gameBoard, turnCounter, resetGame};
     })();
-    /*************************************************************************************
-     * *****module for anything to do with the DOM manipulation
-    ************************************************************************************ */
-    const dom = (() => {
-        let inputs = {
-        container: document.querySelector('.container'),
-        playerSelection: document.querySelector('.playerSelection'),
+
+
+/*********************************************************************************************
+ *****module for end game conditions
+ ****************************************************************************************** */
+const win = (()=>{
+
+
+let winner = false;
+//the rows and columns to check for winning
+let winConditions = {
+    row1: 0,
+    row2: 0,
+    row3: 0,
+    column1: 0,
+    column2: 0,
+    column3: 0,
+    diag1: 0,
+    diag2: 0,
+}
+//adding values to update win conditions
+function updateWins(squareSelected) {
+    if (squareSelected.placement.includes("top")){ win.winConditions.row1 += squareSelected.value}
+    if (squareSelected.placement.includes("mid")){ win.winConditions.row2 += squareSelected.value};
+    if (squareSelected.placement.includes("bottom")){ win.winConditions.row3 += squareSelected.value};
+    if (squareSelected.placement.includes("Left")){ win.winConditions.column1 += squareSelected.value};
+    if (squareSelected.placement.includes("Mid")){ win.winConditions.column2 += squareSelected.value};
+    if (squareSelected.placement.includes("Right")){ win.winConditions.column3 += squareSelected.value};
+    if (squareSelected.placement.includes("topLeft")){ win.winConditions.diag1 += squareSelected.value};
+    if (squareSelected.placement.includes("midMid")){ win.winConditions.diag1 += squareSelected.value};
+    if (squareSelected.placement.includes("bottomRight")){ win.winConditions.diag1 += squareSelected.value};
+    if (squareSelected.placement.includes("topRight")){ win.winConditions.diag2 += squareSelected.value};
+    if (squareSelected.placement.includes("bottomLeft")){ win.winConditions.diag2 += squareSelected.value};
+    if (squareSelected.placement.includes("midMid")){ win.winConditions.diag2 += squareSelected.value};
+    }
+
+
+
+  //checking for a win condition
+  function checkForWin(){
+    let winKeys = Object.keys(win.winConditions)
+        winKeys.forEach((key) => {
+            if (win.winConditions[key] === 3){
+                alert("X wins the game!")
+                win.winner = true;
+                return;
+            }
+            else if (win.winConditions[key] === 30){
+                alert("O wins the game")
+                win.winner = true;
+                return;
+            }
+        });
+        if (game.turnCounter === 9 && win.winner != true){
+            alert("it was a draw")
+            win.winner = true;
+            game.turnCounter = 0;
+            return;
         }
-        return {inputs};
+    };
+
+    return {checkForWin, winConditions, updateWins, winner, }
+    })();
+
+
+/*******************************************************************************************************
+ * ***** module Everything to do with the players
+ *****************************************************************************************************/
+    const player = (() => {
+        
     })();

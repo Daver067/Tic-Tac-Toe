@@ -94,15 +94,18 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: 1fr;
+    column-gap: 15px;
     height: 60vh;
-    width: 80vw;
-    border: 1.5px dashed grey;
+    width: 85vw;
     align-self: center;
     justify-self: center;
 }
 .player {
     display: flex;
     flex-direction: column;
+    border: 3px solid black;
+    box-shadow: 0px 0px 8px 2px rgb(8, 8, 8);
+    background-color: rgb(245, 245, 245);
 }
 .player h1 {
     padding: 1em 0 1em 0;
@@ -114,6 +117,30 @@
     height: 60%;
     gap: 1em;
     margin-left: 3%;
+    margin-right: 3%;
+}
+.input {
+    display: flex;
+    flex-direction: column;
+}
+.input select {
+    width: 40px;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+button {
+    background-color: #008CBA;
+    color: white;
+    height: 2em;
+    width: 45%
+}
+button:hover {
+    background-color: #1d9ac4;
+    cursor: pointer;
 }
 
 .header {
