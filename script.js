@@ -1,11 +1,12 @@
     /*************************************************************************************
-     * *****module for anything to do with the DOM manipulation
+     * *****module for anything to do with the DOM manipulation (this didnt really work as planned...)
     ************************************************************************************ */
 const dom = (() => {
     let inputs = {
     container: document.querySelector('.container'),
     playerSelection: document.querySelector('.playerSelection'),
-    }
+
+    } 
     return {inputs};
 })();
 
@@ -26,11 +27,11 @@ let game = (()=>{
             return;
         }
         if ((game.turnCounter == 0) || (game.turnCounter % 2 == 0)){
-        squareSelected.InnerContent("X");
+        squareSelected.InnerContent(`${player.player1.marker}`);
         squareSelected.value = 1;
         }
         else {
-            squareSelected.InnerContent("O")
+            squareSelected.InnerContent(`${player.player2.marker}`)
             squareSelected.value = 10;
         }
         win.updateWins(squareSelected);
@@ -80,12 +81,9 @@ let game = (()=>{
     new makeSection("bottomRight"),
 ]
 
-    // reset game
-    function resetGame(){
-        while (dom.inputs.container.firstChild){
-            dom.inputs.container.removeChild(dom.inputs.container.firstChild)
-        }
-        game.gameBoard = []
+//function to reset the gameBoard
+    function resetGameBoard(){
+        game.gameBoard = [];
         game.gameBoard = [
             new makeSection("topLeft"),
             new makeSection("topMid"),
@@ -97,18 +95,31 @@ let game = (()=>{
             new makeSection("bottomMid"),
             new makeSection("bottomRight"),
         ]
-        win.winConditions = {
-            row1: 0,
-            row2: 0,
-            row3: 0,
-            column1: 0,
-            column2: 0,
-            column3: 0,
-            diag1: 0,
-            diag2: 0,
+    }
+
+//function to reset win condition object turn counter and winner boolean
+function resetWinConditions(){
+    win.winConditions = {
+        row1: 0,
+        row2: 0,
+        row3: 0,
+        column1: 0,
+        column2: 0,
+        column3: 0,
+        diag1: 0,
+        diag2: 0,
+    }
+    game.turnCounter = 0;
+    win.winner = false;
+}
+
+    // reset game
+    function resetGame(){
+        while (dom.inputs.container.firstChild){
+            dom.inputs.container.removeChild(dom.inputs.container.firstChild)
         }
-        game.turnCounter = 0;
-        win.winner = false;
+        resetGameBoard();
+        resetWinConditions();
         return;
     }
 
@@ -157,12 +168,12 @@ function updateWins(squareSelected) {
     let winKeys = Object.keys(win.winConditions)
         winKeys.forEach((key) => {
             if (win.winConditions[key] === 3){
-                alert("X wins the game!")
+                alert(`${player.player1.name} wins the game!` )
                 win.winner = true;
                 return;
             }
             else if (win.winConditions[key] === 30){
-                alert("O wins the game")
+                alert(`${player.player2.name} wins the game`)
                 win.winner = true;
                 return;
             }
@@ -183,5 +194,63 @@ function updateWins(squareSelected) {
  * ***** module Everything to do with the players
  *****************************************************************************************************/
     const player = (() => {
+        let player1 = {};
+        let player2 = {};
+    
+        let player1LockButton = document.getElementById("submit1");
+        let player1ResetButton = document.getElementById("reset1");
+        let player2LockButton = document.getElementById("submit2");
+        let player2ResetButton = document.getElementById("reset2");
+        let player1Marker = document.getElementById("marker1");
+        let player2Marker = document.getElementById("marker2");
+        let player1Name = document.getElementById("name1");
+        let player2Name = document.getElementById("name2");
+        let player1CatchPhrase = document.getElementById("phrase1");
+        let player2CatchPhrase = document.getElementById("phrase2");
         
+        function sameMarkers(){
+            if (player1.marker == player2.marker){
+                alert("choose different markers")
+                player1.chose = false;
+                player2.chose = false;
+                player1LockButton.addEventListener('click', lockPlayer1Handler)
+                player2LockButton.addEventListener('click', lockPlayer2Handler)
+            }
+        }
+
+        function bothPlayersLocked(){
+            sameMarkers();
+            if ((player1.chose == true) && (player2.chose == true)){
+                dom.inputs.playerSelection.classList.toggle('hidden');
+                dom.inputs.container.classList.toggle('hidden');
+            }
+            else return;
+        }
+
+        let lockPlayer1Handler = function(){
+            player1.name = player1Name.value;
+            player1.marker = player1Marker.value;
+            player1.catchPhrase = player1CatchPhrase.value;
+            player1.chose = true;
+            console.log(player1);
+            player1LockButton.removeEventListener('click', lockPlayer1Handler);
+            bothPlayersLocked()
+
+        }
+        let lockPlayer2Handler = function(){
+            player2.name = player2Name.value;
+            player2.marker = player2Marker.value;
+            player2.catchPhrase = player2CatchPhrase.value;
+            player2.chose = true;
+            console.log(player2);
+            player2LockButton.removeEventListener('click', lockPlayer2Handler);
+            bothPlayersLocked()
+        }
+
+        player1LockButton.addEventListener('click', lockPlayer1Handler)
+        player2LockButton.addEventListener('click', lockPlayer2Handler)
+        
+        
+        return {player1, player2}
+
     })();

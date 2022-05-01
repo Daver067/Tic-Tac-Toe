@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="script.js" defer></script>
+    
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="pageContainer">
-        <div class="playerSelection">
+        <div class="playerSelection ">
             <div class="player">
                 <h1>Player One</h1>
                 <div class="inputs">
@@ -33,8 +33,8 @@
                     </div>
                 </div>
                 <div class="buttons">
-                    <button class="submit1">Lock Choice</button>
-                    <button class="reset1">Reset</button>
+                    <button class="submit1" id="submit1">Lock Choice</button>
+                    <!--<button class="reset1" id="reset1">Reset</button>-->
                 </div>
             </div>            
             <div class="player">
@@ -44,7 +44,7 @@
                         <label for="marker2">Choose Marker:</label>
                         <select name="marker2" id="marker2">
                         <option value="X">X</option>
-                        <option value="O">O</option>
+                        <option value="O" selected>O</option>
                         <option value=":)">:)</option>
                         <option value=":(">:(</option>
                         </select>
@@ -60,8 +60,8 @@
                     </div>
                 </div>
                 <div class="buttons">
-                    <button class="submit2">Lock Choice</button>
-                    <button class="reset2">Reset</button>
+                    <button class="submit2" id="submit2">Lock Choice</button>
+                   <!-- <button class="reset2" id="reset2">Reset</button>-->
                 </div>
             </div>
             <div class="player2"></div>
@@ -70,6 +70,6 @@
     </div>
     <div class="header">Tic-Tac-Toe</div>
     <div class="footer">&copy The Daver gets to move to CostaRica project 2022</div>
-    
+    <script src="script.js" defer></script>
 </body>
 </html>
