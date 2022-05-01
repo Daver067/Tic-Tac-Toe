@@ -1,6 +1,6 @@
-let turnCounter = 0;
 
 let game = (()=>{
+    let turnCounter = 0;
 
     //building game board function
     function makeSection(section){
@@ -61,7 +61,7 @@ let game = (()=>{
     new makeSection("bottomMid"),
     new makeSection("bottomRight"),
 ]
-    return {gameBoard,};
+    return {gameBoard, turnCounter};
     })();
 
 const win = (()=>{
@@ -106,9 +106,9 @@ let UpdateWins = function updateWins(squareSelected) {
                 alert("O wins the game")
                 return;
             }
-            else if (((turnCounter === 9) && (winConditions[key] !==3)) && ((turnCounter === 9) && (winConditions[key] !==30))){
+            else if (((game.turnCounter === 9) && (winConditions[key] !==3)) && ((game.turnCounter === 9) && (winConditions[key] !==30))){
                 alert("it was a draw")
-                turnCounter = 0;
+                game.turnCounter = 0;
                 return;
             }
         })
@@ -142,7 +142,9 @@ let UpdateWins = function updateWins(squareSelected) {
             diag1: 0,
             diag2: 0,
         }
-        turnCounter = 0;
+        game.turnCounter = 0;
     }
     return {resetgame, CheckForWin, winConditions, UpdateWins}
     })();
+
+    const playing = document.querySelector(".container");

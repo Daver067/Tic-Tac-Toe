@@ -7,11 +7,10 @@
     height: 100vh;
     width: 100vw;
     display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .container {
+    margin: auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
@@ -19,6 +18,8 @@
     width: 300px;
     padding: 10px;
     border: .5px dashed grey;
+    align-self: center;
+    justify-self: center;
 }
 
 .board {
@@ -53,12 +54,15 @@
     border: 5px solid #79360d;
     border-left: none;
     border-right: none;
+    margin-top: -1.5px;
+
 }
 
 
 .midMid{
     grid-area: 2/2/3/3;
     border: 5px solid #79360d;
+    margin-top: -1.5px;
 }
 
 .midRight {
@@ -66,6 +70,8 @@
     border: 5px solid #79360d;
     border-left: none;
     border-right: none;
+    margin-top: -1.5px;
+
 }
 .bottomLeft{
     grid-area: 3/1/4/2;
@@ -81,4 +87,64 @@
 
 .bottomRight{
     grid-area: 3/3/4/4;
+}
+
+.playerSelection {
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    height: 60vh;
+    width: 80vw;
+    border: 1.5px dashed grey;
+    align-self: center;
+    justify-self: center;
+}
+.player {
+    display: flex;
+    flex-direction: column;
+}
+.player h1 {
+    padding: 1em 0 1em 0;
+    align-self: center;
+}
+.inputs {
+    display: flex;
+    flex-direction: column;
+    height: 60%;
+    gap: 1em;
+    margin-left: 3%;
+}
+
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 10vh;
+    width: 100vw;
+    background-color: black;
+    color: white;
+    font-size: xx-large;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 10vh;
+    width: 100vw;
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: x-small;
+}
+
+.hidden {
+    display: none;
 }
