@@ -1,4 +1,8 @@
 
+
+/***************************************************************************************
+ This is the module where the game is played
+ **************************************************************************************/
 let game = (()=>{
     let turnCounter = 0;
 
@@ -64,6 +68,9 @@ let game = (()=>{
     return {gameBoard, turnCounter};
     })();
 
+/*********************************************************************************************
+ *****module for end game conditions
+ ****************************************************************************************** */
 const win = (()=>{
 //adding values to update win conditions
 let UpdateWins = function updateWins(squareSelected) {
@@ -146,5 +153,13 @@ let UpdateWins = function updateWins(squareSelected) {
     }
     return {resetgame, CheckForWin, winConditions, UpdateWins}
     })();
-
-    const playing = document.querySelector(".container");
+    /*************************************************************************************
+     * *****module for anything to do with the DOM manipulation
+    ************************************************************************************ */
+    const dom = (() => {
+        let inputs = {
+        container: document.querySelector('.container'),
+        playerSelection: document.querySelector('.playerSelection'),
+        }
+        return {inputs};
+    })();
