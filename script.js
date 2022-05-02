@@ -5,6 +5,11 @@ const dom = (() => {
     let inputs = {
     container: document.querySelector('.container'),
     playerSelection: document.querySelector('.playerSelection'),
+    popUp: document.querySelector('.popUp'),
+    popUp2: document.querySelector('.popUp2'),
+    topH2: document.querySelector('#topH2'),
+    bottomH2: document.querySelector('#bottomH2')
+
 
     } 
     return {inputs};
@@ -23,20 +28,24 @@ let game = (()=>{
             return;
         }
         if (squareSelected.value != 0) {
-            alert("You must play in an un-occupied square");
+            dom.inputs.topH2.innerHTML = "You must play in an un-occupied square";
             return;
         }
         if ((game.turnCounter == 0) || (game.turnCounter % 2 == 0)){
         squareSelected.InnerContent(`${player.player1.marker}`);
+        dom.inputs.topH2.innerHTML = `It is ${player.player2.name}'s turn now.`
         squareSelected.value = 1;
         }
         else {
             squareSelected.InnerContent(`${player.player2.marker}`)
+            dom.inputs.topH2.innerHTML = `It is ${player.player1.name}'s turn now.`
             squareSelected.value = 10;
         }
         win.updateWins(squareSelected);
         game.turnCounter++;
         win.checkForWin();
+        PlayAgain();
+        
 
     }
 
@@ -68,7 +77,7 @@ let game = (()=>{
     }
 
     
-    // the game board setup
+   // the game board setup
     let gameBoard = [
     new makeSection("topLeft"),
     new makeSection("topMid"),
@@ -96,7 +105,6 @@ let game = (()=>{
             new makeSection("bottomRight"),
         ]
     }
-
 //function to reset win condition object turn counter and winner boolean
 function resetWinConditions(){
     win.winConditions = {
@@ -111,6 +119,9 @@ function resetWinConditions(){
     }
     game.turnCounter = 0;
     win.winner = false;
+    dom.inputs.bottomH2.removeChild(dom.inputs.bottomH2.firstElementChild);
+    dom.inputs.topH2.innerHTML = `${player.player1.name} goes first.`
+
 }
 
     // reset game
@@ -120,7 +131,18 @@ function resetWinConditions(){
         }
         resetGameBoard();
         resetWinConditions();
+        
         return;
+    }
+    // function to play again
+    function PlayAgain(){
+        if (win.winner == true){
+        btn = document.createElement('button');
+        btn.classList.add("rematch");
+        btn.innerHTML = "Click for a rematch";
+        btn.addEventListener('click', () => {game.resetGame()})
+        dom.inputs.bottomH2.appendChild(btn);
+        }
     }
 
     return {gameBoard, turnCounter, resetGame};
@@ -132,7 +154,7 @@ function resetWinConditions(){
  ****************************************************************************************** */
 const win = (()=>{
 
-
+//Boolean to check if a winner has been declared
 let winner = false;
 //the rows and columns to check for winning
 let winConditions = {
@@ -168,18 +190,18 @@ function updateWins(squareSelected) {
     let winKeys = Object.keys(win.winConditions)
         winKeys.forEach((key) => {
             if (win.winConditions[key] === 3){
-                alert(`${player.player1.name} wins the game!` )
+                dom.inputs.topH2.innerHTML = `${player.player1.name} wins the game and says ${player.player1.catchPhrase}`
                 win.winner = true;
                 return;
             }
             else if (win.winConditions[key] === 30){
-                alert(`${player.player2.name} wins the game`)
+                dom.inputs.topH2.innerHTML = `${player.player2.name} wins the game and says ${player.player2.catchPhrase}`
                 win.winner = true;
                 return;
             }
         });
         if (game.turnCounter === 9 && win.winner != true){
-            alert("it was a draw")
+            dom.inputs.topH2.innerHTML = `It was a draw.`
             win.winner = true;
             game.turnCounter = 0;
             return;
@@ -198,9 +220,7 @@ function updateWins(squareSelected) {
         let player2 = {};
     
         let player1LockButton = document.getElementById("submit1");
-        let player1ResetButton = document.getElementById("reset1");
         let player2LockButton = document.getElementById("submit2");
-        let player2ResetButton = document.getElementById("reset2");
         let player1Marker = document.getElementById("marker1");
         let player2Marker = document.getElementById("marker2");
         let player1Name = document.getElementById("name1");
@@ -213,6 +233,8 @@ function updateWins(squareSelected) {
                 alert("choose different markers")
                 player1.chose = false;
                 player2.chose = false;
+                player1.marker = "a";
+                player2.marker = "b";
                 player1LockButton.addEventListener('click', lockPlayer1Handler)
                 player2LockButton.addEventListener('click', lockPlayer2Handler)
             }
@@ -223,6 +245,9 @@ function updateWins(squareSelected) {
             if ((player1.chose == true) && (player2.chose == true)){
                 dom.inputs.playerSelection.classList.toggle('hidden');
                 dom.inputs.container.classList.toggle('hidden');
+                dom.inputs.popUp.classList.toggle('hidden');
+                dom.inputs.topH2.innerHTML = `${player.player1.name} goes first.`
+
             }
             else return;
         }
@@ -254,3 +279,5 @@ function updateWins(squareSelected) {
         return {player1, player2}
 
     })();
+
+

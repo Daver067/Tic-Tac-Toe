@@ -8,6 +8,25 @@
     width: 100vw;
     display: flex;
 }
+.popUp{
+    position: absolute;
+    top: 10vh;
+    height: 10vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popUp2{
+    position: absolute;
+    bottom: 10vh;
+    height: 10vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
 
 .container {
     margin: auto;
@@ -174,4 +193,9 @@ button:hover {
 
 .hidden {
     display: none;
+}
+.rematch{
+    width: auto;
+    padding: 8px;
+    height: 3em;
 }
