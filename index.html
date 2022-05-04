@@ -10,12 +10,19 @@
 </head>
 <body>
     <div class="pageContainer">
-        <div class="popUp hidden"><h2 id="topH2"></h2></div>
+        <div class="popUp"><h2 id="topH2"></h2></div>
         <div class="popUp2"><h2 id="bottomH2"></h2></div>
         <div class="playerSelection ">
             <div class="player">
                 <h1>Player One</h1>
                 <div class="inputs">
+                    <div class="input hidden">
+                        <label for="humanComp1">Human or Computer?</label>
+                        <select name="humanComp1" id="humanComp1">
+                        <option value="human1">Human</option>
+                        <option value="comp1">Computer</option>
+                        </select>
+                    </div>
                     <div class="input">
                         <label for="marker1">Choose Marker:</label>
                         <select name="marker1" id="marker1">
@@ -41,6 +48,13 @@
             <div class="player">
                 <h1>Player Two</h1>
                 <div class="inputs">
+                    <div class="input">
+                        <label for="humanComp2">Human or Computer?</label>
+                        <select name="humanComp2" id="humanComp2">
+                        <option value="human2">Human</option>
+                        <option value="comp2">Computer</option>
+                        </select>
+                    </div>
                     <div class="input">
                         <label for="marker2">Choose Marker:</label>
                         <select name="marker2" id="marker2">
