@@ -20,7 +20,11 @@ const dom = (() => {
  This is the module where the game is played
  **************************************************************************************/
 let game = (()=>{
+    // turn counter
     let turnCounter = 0;
+
+   // the game board setup
+   let gameBoard = [];
 
     // player clicking on a square
     function selectSquare(squareSelected){
@@ -88,18 +92,6 @@ let game = (()=>{
     }
 
     
-   // the game board setup
-    let gameBoard = [
-        new makeSection("topLeft",1,0,0,1,0,0,1,0),
-        new makeSection("topMid",1,0,0,0,1,0,0,0),
-        new makeSection("topRight",1,0,0,0,0,1,0,1),
-        new makeSection("midLeft",0,1,0,1,0,0,0,0),
-        new makeSection("midMid",0,1,0,0,1,0,1,1),
-        new makeSection("midRight",0,1,0,0,0,1,0,0),
-        new makeSection("bottomLeft",0,0,1,1,0,0,0,1),
-        new makeSection("bottomMid",0,0,1,0,1,0,0,0),
-        new makeSection("bottomRight",0,0,1,0,0,1,1,0),
-    ]
 
 //function to reset the gameBoard
     function resetGameBoard(){
@@ -156,7 +148,7 @@ function resetWinConditions(){
         }
     }
 
-    return {gameBoard, turnCounter, resetGame, PlayAgain};
+    return {gameBoard, turnCounter, resetGame, PlayAgain, resetGameBoard}
     })();
 
 
@@ -178,23 +170,15 @@ let winConditions = {
     diag1: 0,
     diag2: 0,
 }
-//adding values to update win conditions
-function updateWins(squareSelected) {
-    if (squareSelected.placement.includes("top")){ win.winConditions.row1 += squareSelected.value}
-    if (squareSelected.placement.includes("mid")){ win.winConditions.row2 += squareSelected.value};
-    if (squareSelected.placement.includes("bottom")){ win.winConditions.row3 += squareSelected.value};
-    if (squareSelected.placement.includes("Left")){ win.winConditions.column1 += squareSelected.value};
-    if (squareSelected.placement.includes("Mid")){ win.winConditions.column2 += squareSelected.value};
-    if (squareSelected.placement.includes("Right")){ win.winConditions.column3 += squareSelected.value};
-    if (squareSelected.placement.includes("topLeft")){ win.winConditions.diag1 += squareSelected.value};
-    if (squareSelected.placement.includes("midMid")){ win.winConditions.diag1 += squareSelected.value};
-    if (squareSelected.placement.includes("bottomRight")){ win.winConditions.diag1 += squareSelected.value};
-    if (squareSelected.placement.includes("topRight")){ win.winConditions.diag2 += squareSelected.value};
-    if (squareSelected.placement.includes("bottomLeft")){ win.winConditions.diag2 += squareSelected.value};
-    if (squareSelected.placement.includes("midMid")){ win.winConditions.diag2 += squareSelected.value};
-    }
 
-
+function updateWins(squareSelected){
+    let squareSelectedKeys = Object.keys(squareSelected);
+    squareSelectedKeys.forEach((key) =>{
+        if (squareSelected[key] == 1){
+            win.winConditions[key] += squareSelected.value
+        }
+    })
+}
 
   //checking for a win condition
   function checkForWin(){
@@ -219,7 +203,7 @@ function updateWins(squareSelected) {
         }
     };
 
-    return {checkForWin, winConditions, updateWins, winner, }
+    return {checkForWin, winConditions, winner, updateWins}
     })();
 
 
@@ -259,6 +243,7 @@ function updateWins(squareSelected) {
                 dom.inputs.playerSelection.classList.toggle('hidden');
                 dom.inputs.container.classList.toggle('hidden');
                 dom.inputs.topH2.innerHTML = `${player.player1.name} goes first.`
+                game.resetGameBoard();
             }
             else return;
         }
@@ -298,10 +283,6 @@ const computer = (() => {
     let computerPlayer1Chosen = document.getElementById("humanComp1");
     let computerPlayer2Chosen = document.getElementById("humanComp2");
     
-    function compsTurn(){
-        checkEmptySquare();
-        findBestMove();
-    }
     //Find available moves
     function checkEmptySquare(){
         let allSquares = Array.from(game.gameBoard);
@@ -330,9 +311,7 @@ const computer = (() => {
         winKeys.forEach((key) => {
             //if comp can win
             if (win.winConditions[key] === 20){
-                console.log(`I can win in ${key} next turn`)
                 let possibilities = checkEmptySquare();
-                console.log(possibilities)
                 possibilities.forEach(square => {
                     if (square[key] == 1){
                         winMove = square;
@@ -341,9 +320,7 @@ const computer = (() => {
             }
             //cant win, it must block a win
             else if (win.winConditions[key] === 2){
-                console.log(`I have to block in ${key} or I will lose`);
                 let possibilities = checkEmptySquare();
-                console.log(possibilities)
                 possibilities.forEach(square => {
                     if (square[key] == 1){
                         blockMove = square;
