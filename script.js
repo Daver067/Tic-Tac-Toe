@@ -54,7 +54,7 @@ let game = (()=>{
         PlayAgain();
         if ((player.player2.HumanComp == "comp2") && (win.winner == false)){
             //computer.randomPlay(); super easy mode
-            computer.findBestMove();
+            setTimeout(computer.findBestMove, 500)
         }
 
     }
