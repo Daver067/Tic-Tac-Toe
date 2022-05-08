@@ -52,7 +52,7 @@ let game = (() => {
     changePlayers();
     if (player.player2.HumanComp == "comp2" && !win.winner) {
       //computer.randomPlay(); super easy mode
-      setTimeout(computer.findBestMove, 200);
+      setTimeout(computer.findBestMove, 500);
     }
   }
 
@@ -214,11 +214,11 @@ const win = (() => {
     let winKeys = Object.keys(win.winConditions);
     winKeys.forEach((key) => {
       if (win.winConditions[key] === 3) {
-        dom.inputs.topH2.innerHTML = `${player.player1.name} wins the game and says ${player.player1.catchPhrase}`;
+        dom.inputs.topH2.innerHTML = `${player.player1.name} wins the game and says "${player.player1.catchPhrase}"`;
         win.winner = true;
         return;
       } else if (win.winConditions[key] === 30) {
-        dom.inputs.topH2.innerHTML = `${player.player2.name} wins the game and says ${player.player2.catchPhrase}`;
+        dom.inputs.topH2.innerHTML = `${player.player2.name} wins the game and says "${player.player2.catchPhrase}"`;
         win.winner = true;
         return;
       }
@@ -286,7 +286,7 @@ const player = (() => {
         compValues();
         dom.inputs.playerSelection.classList.toggle("hidden");
         dom.inputs.container.classList.toggle("hidden");
-        dom.inputs.topH2.innerHTML = `${player.player2.name} refuses the name you suggested and requires you to call it ${player.player2.name}. Now make your move.`;
+        dom.inputs.topH2.innerHTML = `The computer refuses the name you suggested and requires you to call it "${player.player2.name}". Now make your move.`;
         game.resetGameBoard();
       }
     } else return;
